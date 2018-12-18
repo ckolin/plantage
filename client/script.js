@@ -1,4 +1,4 @@
-const URL = "http://13.93.25.29:3000/";
+const URL = "http://wasstahtufemplan.ga:3000";
 
 const LOGIN = document.getElementById("login");
 const USER_INPUT = document.getElementById("user-input");
