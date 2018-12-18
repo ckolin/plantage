@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 
 app.route("/")
 	.get((req, res, next) => {
-		Vote.find({}, "-_id __v", (error, votes) => {
+		Vote.find({}, "-_id -__v", (error, votes) => {
 			if (error) return next(error);
 			res.send(votes);
 		});
