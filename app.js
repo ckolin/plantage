@@ -1,3 +1,4 @@
+const https = require("https");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -43,6 +44,7 @@ app.route("/")
 		});
 	});
 
-app.listen(config.port, () => {
-	console.log("started server on port " + config.port);
-})
+const httpsServer = https.createServer(config.credentials, app);
+httpsServer.listen(config.port, () => {
+	console.log("server started on port " + config.port);
+});
