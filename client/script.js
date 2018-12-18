@@ -66,6 +66,7 @@ function load() {
 }
 
 function clear() {
+	SOUNDS_GOOD.disabled = true;
 	MY_VOTE.innerText = "";
 	SUGGESTION.innerText = "";
 	while (ALTERNATIVES.firstChild)
@@ -81,6 +82,8 @@ function show(votes) {
 			places[v.vote] = [];
 		places[v.vote].push(v.user);
 		if (v.user == user) myVote = v.vote;
+		
+		SOUNDS_GOOD.disabled = false;
 	}
 
 	MY_VOTE.innerText = myVote;
