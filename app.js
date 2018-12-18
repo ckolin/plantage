@@ -6,8 +6,6 @@ const config = require("./config");
 
 const app = express();
 
-console.log(config.credentials.certificate);
-
 mongoose.connect(config.mongodb);
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
