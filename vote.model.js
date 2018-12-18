@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let VoteSchema = new Schema({
-	timestamp: {type: Date, expires: "1d", default: Date.now},
+	timestamp: {type: Date, expires: "12h", default: Date.now},
 	user: {type: String},
 	vote: {type: String, required: true}
 });
