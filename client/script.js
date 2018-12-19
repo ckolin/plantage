@@ -1,5 +1,20 @@
 const URL = "https://wasstahtufemplan.ga:3000";
 
+const PLACES = [
+	"Werkk",
+	"Wilma's Kitchen",
+	"Subway",
+	"Pizza",
+	"Migros TakeAway",
+	"Manito",
+	"Mehdi",
+	"BBBRestaurant",
+	"BBBistro",
+	"Coop Restaurant",
+	"Bal's",
+	"Little Italy"
+];
+
 const LOGIN = document.getElementById("login");
 const USER_INPUT = document.getElementById("user-input");
 const CONFIRM = document.getElementById("confirm");
@@ -12,8 +27,8 @@ const MY_SUGGESTION = document.getElementById("my-suggestion");
 const SUGGEST = document.getElementById("suggest");
 
 let user = "Not logged in";
-let myVote = "Not voted yet";
-let suggestion = "No suggestion yet";
+let myVote = "No vote yet";
+let suggestion = PLACES[Math.floor(Math.random() * PLACES.length)];
 
 CONFIRM.onclick = () => {
 	if (!USER_INPUT.value)
@@ -66,7 +81,6 @@ function load() {
 }
 
 function clear() {
-	SOUNDS_GOOD.disabled = true;
 	MY_VOTE.innerText = "";
 	SUGGESTION.innerText = "";
 	while (ALTERNATIVES.firstChild)
@@ -82,8 +96,6 @@ function show(votes) {
 			places[v.vote] = [];
 		places[v.vote].push(v.user);
 		if (v.user == user) myVote = v.vote;
-		
-		SOUNDS_GOOD.disabled = false;
 	}
 
 	MY_VOTE.innerText = myVote;
