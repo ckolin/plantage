@@ -2,8 +2,8 @@
 
 :root {
 	--line-color: white;
-	--radius: 6px;
-	--control-padding: 8px;
+	--radius: 46px;
+	--control-padding: 12px;
 }
 
 body {
@@ -31,6 +31,7 @@ button {
 	border-radius: var(--radius);
 	padding: var(--control-padding);
 	cursor: pointer;
+	margin: 4px;
 }
 
 button:disabled {
@@ -52,6 +53,7 @@ input {
 	border: 1px solid var(--line-color);
 	border-radius: var(--radius);
 	padding: var(--control-padding);
+	max-width: 80vw;
 }
 
 
@@ -94,6 +96,7 @@ input {
 
 #suggestion {
 	display: block;
+	word-break: break-all;
 	font-weight: bold;
 	font-size: 2.5em;
 	text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
