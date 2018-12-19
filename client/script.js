@@ -81,6 +81,7 @@ function load() {
 }
 
 function clear() {
+	myVote = "";
 	MY_VOTE.innerText = "";
 	SUGGESTION.innerText = "";
 	while (ALTERNATIVES.firstChild)
