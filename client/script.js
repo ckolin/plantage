@@ -15,6 +15,16 @@ const PLACES = [
 	"Little Italy"
 ];
 
+const LINKS = {
+	"Werkk": "http://www.werkkbeiz.ch/",
+	"Subway": "https://www.subway.com/de-CH/MenuNutrition/Menu/All",
+	"Migros TakeAway": "https://www.migros.ch/de/genossenschaften/migros-aare/angebot/gastronomie/menuplan-und-angebotsplan.html",
+	"Manito": "https://www.manito.ch/burger/",
+	"BBBRestaurant": "http://bbbaden.sv-restaurant.ch/de/menuplan/restaurant-martinsberg/",
+	"BBBistro": "http://bbbaden.sv-restaurant.ch/de/menuplan/bowls-and-rolls/",
+	"Coop Restaurant": "https://www.coop-restaurant.ch/de/menueseite.vst2524.restaurant.html"
+};
+
 const LOGIN = document.getElementById("login");
 const USER_INPUT = document.getElementById("user-input");
 const CONFIRM = document.getElementById("confirm");
@@ -114,6 +124,13 @@ function show(votes) {
 	}
 
 	SUGGESTION.innerText = suggestion;
+	if (LINKS[suggestion]) {
+		SUGGESTION.classList.add("link");
+		SUGGESTION.onclick = () => window.location = LINKS[suggestion];
+	} else {
+		SUGGESTION.classList.remove("link");
+		SUGGESTION.onclick = null;
+	}
 }
 
 function createAlternative(place, voters) {

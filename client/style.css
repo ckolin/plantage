@@ -21,6 +21,14 @@ hr {
 	margin: 48px;
 }
 
+.link {
+	cursor: pointer;
+}
+
+.link:after {
+	content: "🔗";
+}
+
 button {
 	line-height: 20px;
 	font-family: inherit;
