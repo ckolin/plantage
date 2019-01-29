@@ -19,4 +19,6 @@ function send(to, token) {
 	transporter.sendMail(options);
 }
 
-module.exports = send;
+module.exports = {
+	send: send,
+};
