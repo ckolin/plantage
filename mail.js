@@ -6,6 +6,7 @@ const transporter = nodemailer.createTransport({
 	host: config.mail.host,
 	port: config.mail.port,
 	secure: config.mail.secure,
+	tls: config.mail.tls,
 });
 
 async function send(to, token) {
