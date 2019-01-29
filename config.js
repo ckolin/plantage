@@ -12,6 +12,9 @@ module.exports = {
 		from: "'Plantage' <noreply@wasstahtufemplan.ga>",
 		host: "smtp.localhost",
 		port: 25,
-		secure: "false",
+		secure: false,
+		tls: {
+			rejectUnauthorized: false,
+		},
 	},
 };
