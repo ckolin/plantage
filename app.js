@@ -37,7 +37,7 @@ app.route("/")
 				return next();
 		});
 
-		model.Vote.remove({ user: req.body.user }, (error) => {});
+		model.Vote.deleteOne({ user: req.body.user }, (error) => {});
 
 		let vote = new model.Vote({
 			vote: req.body.vote,
@@ -51,7 +51,7 @@ app.route("/")
 	});
 
 app.route("/register").post((req, res, next) => {
-	model.User.remove({ email: req.body.email }, (error) => {});
+	model.User.deleteOne({ email: req.body.email }, (error) => {});
 
 	const t = token();
 	let user = new model.User({
@@ -62,8 +62,8 @@ app.route("/register").post((req, res, next) => {
 	user.save((error) => {
 		if (error) return next(error);
 		mail.send(req.body.email, t);
-		res.send(t);
-	});
+		res.status(200).send();
+	});	
 });
 
 const httpsServer = https.createServer(config.credentials, app);
