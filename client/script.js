@@ -118,7 +118,7 @@ function show(votes) {
 		if (!places[v.vote])
 			places[v.vote] = [];
 		places[v.vote].push(v.name);
-		if (v.name == user) myVote = v.vote;
+		if (v.name == "") myVote = v.vote; // TODO
 	}
 
 	let max = 0;
