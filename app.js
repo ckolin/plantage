@@ -53,7 +53,7 @@ app.route("/")
 app.route("/register").post((req, res, next) => {
 	model.User.remove({ email: req.body.email }, (error) => {});
 
-	const t = token.next();
+	const t = token();
 	let user = new model.User({
 		email: req.body.email,
 		token: t,
