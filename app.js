@@ -50,7 +50,7 @@ app.route("/")
 		});
 	});
 
-app.route("/register").get((req, res, next) => {
+app.route("/register").post((req, res, next) => {
 	model.User.remove({ email: req.body.email }, (error) => {});
 
 	const t = token.next();
