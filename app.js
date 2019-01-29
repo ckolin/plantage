@@ -34,7 +34,7 @@ app.route("/")
 	.post((req, res, next) => {
 		model.User.find({ token: req.body.token }, (error, users) => {
 			if (users.length == 0)
-				return next();
+				return res.status(500).send();
 		});
 
 		model.Vote.deleteOne({ user: req.body.user }, (error) => {});
