@@ -10,7 +10,7 @@ module.exports = {
 	},
 	mail: {
 		from: "'Plantage' <noreply@wasstahtufemplan.ga>",
-		host: "localhost",
+		host: "smtp.localhost",
 		port: 25,
 		secure: "false",
 	},
