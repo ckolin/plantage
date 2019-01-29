@@ -25,35 +25,36 @@ const LINKS = {
 	"Coop Restaurant": "https://www.coop-restaurant.ch/de/menueseite.vst2524.restaurant.html"
 };
 
+const OVERLAY = document.getElementById("overlay");
 const LOGIN = document.getElementById("login");
-const USER_INPUT = document.getElementById("user-input");
+const NAME_INPUT = document.getElementById("user-input");
+const EMAIL_INPUT = document.getElementById("email-input");
 const CONFIRM = document.getElementById("confirm");
-const USER = document.getElementById("user");
-const MY_VOTE = document.getElementById("my-vote");
 const SUGGESTION = document.getElementById("suggestion");
 const SOUNDS_GOOD = document.getElementById("sounds-good");
 const ALTERNATIVES = document.getElementById("alternatives");
 const MY_SUGGESTION = document.getElementById("my-suggestion");
 const SUGGEST = document.getElementById("suggest");
 
-let user = "Not logged in";
-let myVote = "No vote yet";
+let token = "";
+let myVote = "";
 let suggestion = PLACES[Math.floor(Math.random() * PLACES.length)];
 
 CONFIRM.onclick = () => {
-	if (!USER_INPUT.value)
+	const name = NAME_INPUT.value;
+	const email = EMAIL_INPUT.value;
+	
+	if (!name || !email)
 		return;
 	
-	user = USER_INPUT.value;
-	localStorage.setItem("user", user);
-	LOGIN.classList.add("hidden");
-	window.onload();
+	fetch(URL + "/register", {
+		method: "POST",
+		body: JSON.stringify({ email: email,  name: name }),
+		headers: { "Content-Type": "application/json" },
+	});
+	
+	LOGIN.innerText = "We've sent you an email with a confirmation link.";
 }
-
-USER_INPUT.addEventListener("keydown", (event) => {
-	if (event.keyCode == 13)
-		CONFIRM.onclick();
-});
 
 SOUNDS_GOOD.onclick = () => vote(suggestion);
 
@@ -68,20 +69,32 @@ MY_SUGGESTION.addEventListener("keydown", (event) => {
 });
 
 window.onload = () => {
-	loadUser();
+	checkToken();	
+	loadToken();
 	load();
 };
 
-function loadUser() {
-	user = localStorage.getItem("user")
-	if (!user)
-		showLogin();
-	
-	USER.innerText = user;
+function checkToken() {
+	if (location.hash) {
+		localStorage.setItem("token", location.hash.substr(1));
+		location.hash = "";
+		history.replaceState("", document.title, window.location.pathname);
+		hideOverlay();
+	}
 }
 
-function showLogin() {
-	LOGIN.classList.remove("hidden");
+function loadToken() {
+	token = localStorage.getItem("token");
+	if (!token)
+		showOverlay();
+}
+
+function showOverlay() {
+	OVERLAY.classList.remove("hidden");
+}
+
+function hideOverlay() {
+	OVERLAY.classList.add("hidden");
 }
 
 function load() {
@@ -92,7 +105,6 @@ function load() {
 
 function clear() {
 	myVote = "";
-	MY_VOTE.innerText = "";
 	SUGGESTION.innerText = "";
 	while (ALTERNATIVES.firstChild)
 		ALTERNATIVES.removeChild(ALTERNATIVES.firstChild);
@@ -105,11 +117,9 @@ function show(votes) {
 	for (let v of votes) {
 		if (!places[v.vote])
 			places[v.vote] = [];
-		places[v.vote].push(v.user);
-		if (v.user == user) myVote = v.vote;
+		places[v.vote].push(v.name);
+		if (v.name == user) myVote = v.vote;
 	}
-
-	MY_VOTE.innerText = myVote;
 
 	let max = 0;
 	for (let place of Object.keys(places)) {
@@ -163,8 +173,8 @@ function createAlternative(place, voters) {
 function vote(place) {
 	fetch(URL, {
 		method: "POST",
-		body: JSON.stringify({vote: place, user: user}),
-		headers: {"Content-Type": "application/json"}
+		body: JSON.stringify({ vote: place, token: token }),
+		headers: { "Content-Type": "application/json" },
 	}).then(response => {
 		load();
 	});

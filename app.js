@@ -32,21 +32,21 @@ app.route("/")
 		});
 	})
 	.post((req, res, next) => {
-		model.User.find({ token: req.body.token }, (error, users) => {
-			if (users.length == 0)
+		model.User.findOne({ token: req.body.token }, (error, user) => {
+			if (user == null)
 				return res.status(500).send();
-		});
 
-		model.Vote.deleteOne({ user: req.body.user }, (error) => {});
+			model.Vote.deleteOne({ user: req.body.user }, (error) => {});
 
-		let vote = new model.Vote({
-			vote: req.body.vote,
-			user: req.body.user
-		});
+			let vote = new model.Vote({
+				vote: req.body.vote,
+				name: user.name,
+			});
 
-		vote.save((error) => {
-			if (error) return next(error);
-			res.status(200).send();
+			vote.save((error) => {
+				if (error) return next(error);
+				res.status(200).send();
+			});
 		});
 	});
 
@@ -56,6 +56,7 @@ app.route("/register").post((req, res, next) => {
 	const t = token();
 	let user = new model.User({
 		email: req.body.email,
+		name: req.body.name,
 		token: t,
 	});
 

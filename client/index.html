@@ -8,16 +8,16 @@
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 </head>
 <body>
-	<div id="login" class="hidden">
-		<span>Please enter your name</span><br>
-		<input placeholder="Name" type="text" id="user-input"/>
-		<button id="confirm">Confirm</button>
+	<div id="overlay" class="hidden">
+		<div id="login">
+			<span>Please create an account:</span><br>
+			<input placeholder="Email" type="text" id="email-input"/><br>
+			<input placeholder="Name" type="text" id="user-input"/><br>
+			<button id="confirm">Confirm</button>
+		</div>
 		<div id="blur"></div>
 	</div>
 	<main id="main">
-		<span id="user"></span>
-		<span id="my-vote"></span>
-		<hr>
 		<span id="suggestion"></span>
 		<button id="sounds-good">Sounds good!</button>
 		<hr>
