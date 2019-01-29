@@ -13,8 +13,8 @@ async function send(to, token) {
 	const options = {
 		from: config.mail.from,
 		to: to,
-		subject: "[Plantage] Your Account",
-		html: `<h2>Plantage</h2><h1>Your Account</h1><p>Click <a href=https://${config.domain}#${token}>here</a> to activate your account.</p>`,
+		subject: "Plantage | Your Account",
+		html: `<h3>Click <a href=https://${config.domain}#${token}>here</a> to activate your account.</h3>`,
 	};
 	
 	await transporter.sendMail(options);
