@@ -2,19 +2,20 @@ const https = require("https");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+
 const config = require("./config");
+const mail = require("./mail");
+const model = require("./model");
+const token = require("./token");
 
-const app = express();
-
-mongoose.connect(config.mongodb);
+mongoose.connect(config.db);
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on("error", () => console.error("mongodb connection error"));
 
-const Vote = require("./vote.model");
-
+const app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use((req, res, next) => {
 	res.set({
 		"Access-Control-Allow-Origin": "*",
@@ -25,15 +26,20 @@ app.use((req, res, next) => {
 
 app.route("/")
 	.get((req, res, next) => {
-		Vote.find({}, "-_id -__v", (error, votes) => {
+		model.Vote.find({}, "-_id -__v", (error, votes) => {
 			if (error) return next(error);
 			res.send(votes);
 		});
 	})
 	.post((req, res, next) => {
-		Vote.remove({user: req.body.user}, (error) => {});
+		model.User.find({ token: req.body.token }, (error, users) => {
+			if (users.length == 0)
+				return next();
+		});
 
-		let vote = new Vote({
+		model.Vote.remove({ user: req.body.user }, (error) => {});
+
+		let vote = new model.Vote({
 			vote: req.body.vote,
 			user: req.body.user
 		});
@@ -43,6 +49,22 @@ app.route("/")
 			res.status(200).send();
 		});
 	});
+
+app.route("/register").get((req, res, next) => {
+	model.User.remove({ email: req.body.email }, (error) => {});
+
+	const t = token.next();
+	let user = new model.User({
+		email: req.body.email,
+		token: t,
+	});
+
+	user.save((error) => {
+		if (error) return next(error);
+		mail.send(req.body.email, t);
+		res.send(t);
+	});
+});
 
 const httpsServer = https.createServer(config.credentials, app);
 httpsServer.listen(config.port, () => {
