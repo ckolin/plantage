@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
 	secure: config.mail.secure,
 });
 
-function send(to, token) {
+async function send(to, token) {
 	const options = {
 		from: config.mail.from,
 		to: to,
@@ -16,7 +16,7 @@ function send(to, token) {
 		html: `<h2>Plantage</h2><h1>Your Account</h1><p>Click <a href=https://${config.domain}#${token}>here</a> to activate your account.</p>`,
 	};
 	
-	transporter.sendMail(options);
+	await transporter.sendMail(options);
 }
 
 module.exports = {
