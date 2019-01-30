@@ -34,7 +34,7 @@ app.route("/")
 	.post((req, res, next) => {
 		model.User.findOne({ token: req.body.token }, (error, user) => {
 			if (user == null)
-				return res.status(500).send();
+				return res.status(404).send();
 
 			model.Vote.deleteOne({ name: req.body.name }, (error) => {});
 
@@ -50,22 +50,30 @@ app.route("/")
 		});
 	});
 
-app.route("/user").post((req, res, next) => {
-	model.User.deleteOne({ email: req.body.email }, (error) => {});
+app.route("/user")
+	.get((req, res, next) => {
+		model.User.findOne({ token: req.query.token }, (error, user) => {
+			if (user == null)
+				return res.status(404).send();
+			res.send(user);
+		});
+	})
+	.post((req, res, next) => {
+		model.User.deleteOne({ email: req.body.email }, (error) => {});
 
-	const t = token();
-	let user = new model.User({
-		email: req.body.email,
-		name: req.body.name,
-		token: t,
+		const t = token();
+		let user = new model.User({
+			email: req.body.email,
+			name: req.body.name,
+			token: t,
+		});
+
+		user.save((error) => {
+			if (error) return next(error);
+			mail.send(req.body.email, t);
+			res.status(200).send();
+		});	
 	});
-
-	user.save((error) => {
-		if (error) return next(error);
-		mail.send(req.body.email, t);
-		res.status(200).send();
-	});	
-});
 
 const httpsServer = https.createServer(config.credentials, app);
 httpsServer.listen(config.port, () => {

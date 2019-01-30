@@ -90,7 +90,7 @@ function loadToken() {
 	if (!token)
 		return showOverlay();
 
-	fetch(URL + "/user")
+	fetch(URL + "/user?token=" + token)
 		.then(response => response.json())
 		.then(user => {
 			name = user.name;
