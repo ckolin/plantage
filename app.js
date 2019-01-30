@@ -59,6 +59,10 @@ app.route("/user")
 		});
 	})
 	.post((req, res, next) => {
+		let re = new RegExp(config.mail.regex);
+		if (!re.test(req.body.email))
+			return res.status(500).send();
+
 		model.User.deleteOne({ email: req.body.email }, (error) => {});
 
 		const t = token();
