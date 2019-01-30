@@ -38,9 +38,9 @@ const ALTERNATIVES = document.getElementById("alternatives");
 const MY_SUGGESTION = document.getElementById("my-suggestion");
 const SUGGEST = document.getElementById("suggest");
 
-let name = "Not logged in";
+let name = "";
 let token = "";
-let myVote = "Not voted yet";
+let myVote = "";
 let suggestion = PLACES[Math.floor(Math.random() * PLACES.length)];
 
 CONFIRM.onclick = () => {
@@ -75,11 +75,11 @@ MY_SUGGESTION.addEventListener("keydown", (event) => {
 });
 
 window.onload = () => {
-	loadToken();
+	loadUser();
 	load();
 };
 
-function loadToken() {
+function loadUser() {
 	if (location.hash) {
 		localStorage.setItem("token", location.hash.substr(1));
 		location.hash = "";
@@ -94,6 +94,7 @@ function loadToken() {
 		.then(response => response.json())
 		.then(user => {
 			name = user.name;
+			NAME.innerText = name;
 		});
 }
 
@@ -113,6 +114,7 @@ function load() {
 
 function clear() {
 	myVote = "";
+	MY_VOTE.innerText = "";
 	SUGGESTION.innerText = "";
 	while (ALTERNATIVES.firstChild)
 		ALTERNATIVES.removeChild(ALTERNATIVES.firstChild);
@@ -181,7 +183,7 @@ function createAlternative(place, voters) {
 function vote(place) {
 	fetch(URL, {
 		method: "POST",
-		body: JSON.stringify({ vote: place, token: token }),
+		body: JSON.stringify({ vote: place, name: name, token: token }),
 		headers: { "Content-Type": "application/json" },
 	}).then(response => {
 		load();
