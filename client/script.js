@@ -62,6 +62,11 @@ CONFIRM.onclick = () => {
 	});
 }
 
+EMAIL_INPUT.addEventListener("keydown", (event) => {
+	if (event.keyCode == 13)
+		CONFIRM.onclick();
+});
+
 SOUNDS_GOOD.onclick = () => vote(suggestion);
 
 SUGGEST.onclick = () => {
