@@ -131,7 +131,7 @@ function show(votes) {
 		if (v.name == name) myVote = v.vote;
 	}
 
-	MY_VOTE.innerTExt = myVote;
+	MY_VOTE.innerText = myVote;
 
 	let max = 0;
 	for (let place of Object.keys(places)) {
@@ -185,7 +185,7 @@ function createAlternative(place, voters) {
 function vote(place) {
 	fetch(URL, {
 		method: "POST",
-		body: JSON.stringify({ vote: place, name: name, token: token }),
+		body: JSON.stringify({ vote: place, token: token }),
 		headers: { "Content-Type": "application/json" },
 	}).then(response => {
 		load();

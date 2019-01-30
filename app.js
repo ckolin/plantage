@@ -36,7 +36,7 @@ app.route("/")
 			if (user == null)
 				return res.status(404).send();
 
-			model.Vote.deleteOne({ name: req.body.name }, (error) => {});
+			model.Vote.deleteOne({ name: user.name }, (error) => {});
 
 			let vote = new model.Vote({
 				vote: req.body.vote,
