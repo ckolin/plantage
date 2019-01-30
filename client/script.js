@@ -131,6 +131,8 @@ function show(votes) {
 		if (v.name == name) myVote = v.vote;
 	}
 
+	MY_VOTE.innerTExt = myVote;
+
 	let max = 0;
 	for (let place of Object.keys(places)) {
 		const voters = places[place];
