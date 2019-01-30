@@ -27,17 +27,20 @@ const LINKS = {
 
 const OVERLAY = document.getElementById("overlay");
 const LOGIN = document.getElementById("login");
-const NAME_INPUT = document.getElementById("user-input");
+const NAME_INPUT = document.getElementById("name-input");
 const EMAIL_INPUT = document.getElementById("email-input");
 const CONFIRM = document.getElementById("confirm");
+const NAME = document.getElementById("name");
+const MY_VOTE = document.getElementById("my-vote");
 const SUGGESTION = document.getElementById("suggestion");
 const SOUNDS_GOOD = document.getElementById("sounds-good");
 const ALTERNATIVES = document.getElementById("alternatives");
 const MY_SUGGESTION = document.getElementById("my-suggestion");
 const SUGGEST = document.getElementById("suggest");
 
+let name = "Not logged in";
 let token = "";
-let myVote = "";
+let myVote = "Not voted yet";
 let suggestion = PLACES[Math.floor(Math.random() * PLACES.length)];
 
 CONFIRM.onclick = () => {
@@ -47,13 +50,16 @@ CONFIRM.onclick = () => {
 	if (!name || !email)
 		return;
 	
-	fetch(URL + "/register", {
+	fetch(URL + "/user", {
 		method: "POST",
 		body: JSON.stringify({ email: email,  name: name }),
 		headers: { "Content-Type": "application/json" },
+	}).then(response => {
+		if (response.status == 200)
+			LOGIN.innerText = "We've sent you an email with a confirmation link.";
+		else
+			LOGIN.innerText = "Oops! Something went wrong. Please try again later."
 	});
-	
-	LOGIN.innerText = "We've sent you an email with a confirmation link.";
 }
 
 SOUNDS_GOOD.onclick = () => vote(suggestion);
@@ -69,24 +75,26 @@ MY_SUGGESTION.addEventListener("keydown", (event) => {
 });
 
 window.onload = () => {
-	checkToken();	
 	loadToken();
 	load();
 };
 
-function checkToken() {
+function loadToken() {
 	if (location.hash) {
 		localStorage.setItem("token", location.hash.substr(1));
 		location.hash = "";
 		history.replaceState("", document.title, window.location.pathname);
-		hideOverlay();
 	}
-}
 
-function loadToken() {
 	token = localStorage.getItem("token");
 	if (!token)
-		showOverlay();
+		return showOverlay();
+
+	fetch(URL + "/user")
+		.then(response => response.json())
+		.then(user => {
+			name = user.name;
+		});
 }
 
 function showOverlay() {
@@ -118,7 +126,7 @@ function show(votes) {
 		if (!places[v.vote])
 			places[v.vote] = [];
 		places[v.vote].push(v.name);
-		if (v.name == "") myVote = v.vote; // TODO
+		if (v.name == name) myVote = v.vote;
 	}
 
 	let max = 0;

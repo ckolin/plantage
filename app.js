@@ -50,7 +50,7 @@ app.route("/")
 		});
 	});
 
-app.route("/register").post((req, res, next) => {
+app.route("/user").post((req, res, next) => {
 	model.User.deleteOne({ email: req.body.email }, (error) => {});
 
 	const t = token();
